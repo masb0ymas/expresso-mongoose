@@ -1,7 +1,6 @@
-import { LOG_SERVER } from '@config/baseURL'
-import User, { UserLoginAttributes } from '@entity/User'
+import User, { UserLoginAttributes } from '@database/models/User'
+import { logErrServer } from '@expresso/helpers/Formatter'
 import HttpResponse from '@expresso/modules/Response/HttpResponse'
-import chalk from 'chalk'
 import { NextFunction, Request, Response } from 'express'
 
 function PermissionAccess(roles: string[]) {
@@ -9,11 +8,12 @@ function PermissionAccess(roles: string[]) {
     const userLogin = req.getState('userLogin') as UserLoginAttributes
     const getUser = await User.findById(userLogin.uid)
 
-    // @ts-expect-error
-    if (!roles.includes(getUser.Role)) {
-      const errType = `Permission Access Error:`
-      const message = 'You are not allowed'
-      console.log(LOG_SERVER, chalk.red(errType), chalk.green(message))
+    const errType = `Permission Access Error:`
+    const message = 'You are not allowed'
+
+    if (getUser && !roles.includes(getUser.Role)) {
+      // log error
+      console.log(logErrServer(errType, message))
 
       const httpResponse = HttpResponse.get({
         code: 403,

@@ -1,14 +1,9 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
-import { LOG_SERVER } from '@config/baseURL'
 import clientRedis from '@config/clientRedis'
-import chalk from 'chalk'
-import dotenv from 'dotenv'
+import { RATE_LIMIT } from '@config/env'
+import { logErrServer } from '@expresso/helpers/Formatter'
 import { NextFunction, Request, Response } from 'express'
 import { RateLimiterRedis } from 'rate-limiter-flexible'
-
-dotenv.config()
-
-const RATE_LIMIT = Number(process.env.RATE_LIMIT) || 50
 
 // Rate Limit Request
 const rateLimiter = new RateLimiterRedis({
@@ -29,7 +24,8 @@ async function ExpressRateLimit(
   } catch (err) {
     const errType = `Limit Request Error:`
     const message = 'Too Many Requests'
-    console.log(LOG_SERVER, chalk.red(errType), chalk.green(message))
+
+    console.log(logErrServer(errType, message))
 
     return res.status(429).json({ code: 429, message })
   }

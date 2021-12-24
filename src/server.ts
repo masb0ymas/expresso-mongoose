@@ -3,13 +3,9 @@ import './pathAlias'
 
 import initialAwsS3 from '@config/clientS3'
 import initialMongoDB from '@config/database'
-import dotenv from 'dotenv'
+import { AWS_ACCESS_KEY, AWS_SECRET_KEY } from '@config/env'
 import App from './app'
 import initialJobs from './jobs'
-
-dotenv.config()
-
-const { AWS_ACCESS_KEY, AWS_SECRET_KEY } = process.env
 
 const Server = new App()
 

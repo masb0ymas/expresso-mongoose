@@ -1,21 +1,17 @@
 import { BASE_URL_SERVER } from '@config/baseURL'
 import ResponseError from '@expresso/modules/Response/ResponseError'
 import EmailProvider from '@expresso/providers/Email'
-import dotenv from 'dotenv'
 import fs from 'fs'
 import Handlebars from 'handlebars'
 import path from 'path'
 import { readHTMLFile } from './File'
-
-dotenv.config()
+import { APP_NAME } from '@config/env'
 
 interface AccountRegistrationProps {
   email: string
   fullName: string
   token: string
 }
-
-const APP_NAME = process.env.APP_NAME ?? 'expresso'
 
 const SMTPEmail = new EmailProvider()
 
@@ -40,6 +36,7 @@ class SendMail {
       )
     }
 
+    // read html template email
     readHTMLFile(templatePath, (err: Error, html: any) => {
       if (err) console.log(err)
 

@@ -3,51 +3,75 @@ import {
   GetBucketAclCommandOutput,
   S3,
 } from '@aws-sdk/client-s3'
-import chalk from 'chalk'
-
-const { AWS_ACCESS_KEY, AWS_SECRET_KEY }: any = process.env
+import { logErrServer, logServer } from '@expresso/helpers/Formatter'
+import { addDays } from 'date-fns'
+import ms from 'ms'
+import {
+  AWS_ACCESS_KEY,
+  AWS_BUCKET_NAME,
+  AWS_REGION,
+  AWS_S3_EXPIRED,
+  AWS_SECRET_KEY,
+} from './env'
 
 export const clientS3 = new S3({
   credentials: {
     accessKeyId: AWS_ACCESS_KEY,
     secretAccessKey: AWS_SECRET_KEY,
   },
-  region: 'ap-southeast-2',
+  region: AWS_REGION,
 })
 
-export const BUCKET_NAME = process.env.AWS_BUCKET_NAME ?? 'terami'
-
-// create bucket
+// Create AWS S3 Bucket
 function createS3Bucket(): void {
-  clientS3.createBucket({ Bucket: BUCKET_NAME }, function (err, data) {
+  clientS3.createBucket({ Bucket: AWS_BUCKET_NAME }, function (err, data) {
     if (err) {
-      console.log(`${chalk.red('Aws S3 Err: ')}`, err)
+      console.log(logErrServer('Aws S3 Error:', err))
+
+      process.exit(1)
     } else {
-      console.log(
-        `${chalk.cyan('Success create bucket')} ${chalk.green(BUCKET_NAME)}`,
-        data?.Location
-      )
+      const msgType = `Aws S3`
+      const message = `Success create bucket`
+
+      console.log(logServer(msgType, message), data?.Location)
     }
   })
 }
 
-// initial aws s3
-export const initialAwsS3 = async (): Promise<
+// Initial AWS S3
+const initialAwsS3 = async (): Promise<
   GetBucketAclCommandOutput | undefined
 > => {
   try {
+    // initial bucket
     const data = await clientS3.send(
-      new GetBucketAclCommand({ Bucket: BUCKET_NAME })
+      new GetBucketAclCommand({ Bucket: AWS_BUCKET_NAME })
     )
-    console.log(
-      `${chalk.cyan('Success get bucket')} ${chalk.green(BUCKET_NAME)}`,
-      data.Grants
-    )
+
+    const msgType = `Aws S3`
+    const message = `Success Get Bucket`
+
+    console.log(logServer(msgType, message), data.Grants)
+
     return data
   } catch (err) {
-    console.log(err)
+    const errType = `Aws S3 Error:`
+    const message = `${err}`
+
+    console.log(logErrServer(errType, message))
+
+    // create bucket if doesn't exist
     createS3Bucket()
   }
 }
+
+const getNumberExpires = AWS_S3_EXPIRED.replace(/[^0-9]/g, '')
+const getMilliSecondExpires = ms(AWS_S3_EXPIRED)
+
+// S3 Object Expired ( 7 days )
+export const s3ObjectExpired = Number(getMilliSecondExpires) / 1000
+
+// S3 Expires in 7 days
+export const s3ExpiresDate = addDays(new Date(), Number(getNumberExpires))
 
 export default initialAwsS3

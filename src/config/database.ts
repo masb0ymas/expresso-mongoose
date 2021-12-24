@@ -1,22 +1,19 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import chalk from 'chalk'
+import { logErrServer, logServer } from '@expresso/helpers/Formatter'
 import mongoose from 'mongoose'
-import { LOG_SERVER } from './baseURL'
+import {
+  MONGODB_AUTH,
+  MONGODB_DATABASE,
+  MONGODB_HOST,
+  MONGODB_PASSWORD,
+  MONGODB_PORT,
+  MONGODB_USERNAME,
+} from './env'
 
-require('dotenv').config()
-
-const USERNAME = process.env.MONGODB_USERNAME
-const PASSWORD = process.env.MONGODB_PASSWORD
-const AUTH_SOURCE = process.env.MONGODB_AUTH
-const HOST = process.env.MONGODB_HOST
-const PORT = process.env.MONGODB_PORT
-const COLLECTION = process.env.MONGODB_DATABASE
-
-const setUri = `mongodb://${HOST}:${PORT}/${COLLECTION}`
+const setUri = `mongodb://${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}`
 const setOptions = {
-  user: USERNAME ?? undefined,
-  pass: PASSWORD ?? undefined,
-  authSource: AUTH_SOURCE,
+  user: MONGODB_USERNAME,
+  pass: MONGODB_PASSWORD,
+  authSource: MONGODB_AUTH,
   useCreateIndex: true,
   useNewUrlParser: true,
   useFindAndModify: false,
@@ -29,16 +26,21 @@ const initialMongoDB = (): void => {
     .connect(setUri, setOptions)
     .then(() => {
       console.log(
-        `${LOG_SERVER} Successfully connected to the ${chalk.cyan(
-          'MongoDB database'
-        )}`
+        logServer(
+          'mongodb',
+          `Successfully connected to the database : ${MONGODB_DATABASE}`
+        )
       )
     })
     .catch((err) => {
       console.log(
-        `${LOG_SERVER} Could not connect to the MongoDB database:`,
+        logErrServer(
+          'mongodb',
+          `Could not connect to the MongoDB database : ${MONGODB_DATABASE}`
+        ),
         err
       )
+
       process.exit()
     })
 }
