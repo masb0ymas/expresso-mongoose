@@ -1,4 +1,4 @@
-import Role, { RoleEntity, RoleInstance } from '@entity/Role'
+import Role, { RoleEntity, RoleInstance } from '@database/models/Role'
 import useValidation from '@expresso/hooks/useValidation'
 import { DtoFindAll } from '@expresso/interfaces/Dto'
 import {
@@ -26,13 +26,13 @@ class RoleService {
     if (!page) page = 0
     if (!pageSize) pageSize = 10
 
-    const skip = page > 0 ? Number(Number(page) - 1) : 0
+    const skip = Number(page) > 0 ? Number(Number(page) - 1) : 0
     const filterObject = filtered ? FilterQueryObject(JSON.parse(filtered)) : {}
 
     const data = await Role.find(filterObject)
       .limit(Number(pageSize))
-      .skip(Number(pageSize) * Number(skip))
-      .sort({ createdAt: 'asc' })
+      .skip(Number(pageSize) * skip)
+      .sort({ createdAt: 'desc' })
 
     const total = await Role.countDocuments(filterObject)
 
