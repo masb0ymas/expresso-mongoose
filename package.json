@@ -134,7 +134,7 @@
     "@expresso/*": "dist/@expresso/*",
     "@config/*": "dist/config/*",
     "@controllers/*": "dist/controllers/*",
-    "@entity/*": "dist/entity/*",
+    "@database/*": "dist/database/*",
     "@jobs/*": "dist/jobs/*",
     "@middlewares/*": "dist/middlewares/*",
     "@routes/*": "dist/routes/*",

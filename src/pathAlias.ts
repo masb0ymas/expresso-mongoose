@@ -4,7 +4,7 @@ ModuleAlias.addAliases({
   '@expresso': `${__dirname}/@expresso`,
   '@config': `${__dirname}/config`,
   '@controllers': `${__dirname}/controllers`,
-  '@entity': `${__dirname}/entity`,
+  '@database': `${__dirname}/database`,
   '@jobs': `${__dirname}/jobs`,
   '@middlewares': `${__dirname}/middlewares`,
   '@routes': `${__dirname}/routes`,
