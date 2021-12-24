@@ -1,4 +1,5 @@
 import { BASE_URL_SERVER } from '@config/baseURL'
+import { NODE_ENV } from '@config/env'
 import asyncHandler from '@expresso/helpers/asyncHandler'
 import { formatDateTime } from '@expresso/helpers/Date'
 import HttpResponse from '@expresso/modules/Response/HttpResponse'
@@ -6,7 +7,6 @@ import ResponseError from '@expresso/modules/Response/ResponseError'
 import v1Route from '@routes/v1'
 import Express, { Request, Response } from 'express'
 
-const { NODE_ENV } = process.env
 const route = Express.Router()
 
 // Index Route
@@ -25,7 +25,7 @@ route.get('/', function (req: Request, res: Response) {
   }
 
   const httpResponse = HttpResponse.get(responseData)
-  return res.json(httpResponse)
+  res.json(httpResponse)
 })
 
 // Get Health Server
