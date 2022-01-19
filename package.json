@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "description": "express, mongodb & typescript",
   "main": "src/server.ts",
+  "private": true,
   "scripts": {
     "key:generate": "npx ts-node ./src/@expresso/scripts/generate.ts",
     "dev": "npm-run-all build start:dev",
