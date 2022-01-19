@@ -21,25 +21,18 @@ const setOptions = {
 }
 
 const initialMongoDB = (): void => {
+  const msgTye = 'mongodb'
+
   // Connecting to the database
   mongoose
     .connect(setUri, setOptions)
     .then(() => {
-      console.log(
-        logServer(
-          'mongodb',
-          `Successfully connected to the database : ${MONGODB_DATABASE}`
-        )
-      )
+      const message = `Successfully connected to the database : ${MONGODB_DATABASE}`
+      console.log(logServer(msgTye, message))
     })
     .catch((err) => {
-      console.log(
-        logErrServer(
-          'mongodb',
-          `Could not connect to the MongoDB database : ${MONGODB_DATABASE}`
-        ),
-        err
-      )
+      const message = `Could not connect to the MongoDB database : ${MONGODB_DATABASE}`
+      console.log(logErrServer(msgTye, message), err)
 
       process.exit()
     })
