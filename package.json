@@ -34,7 +34,7 @@
   "author": "masb0ymas",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.42.0",
+    "@aws-sdk/client-s3": "^3.53.0",
     "@aws-sdk/s3-request-presigner": "^3.42.0",
     "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
