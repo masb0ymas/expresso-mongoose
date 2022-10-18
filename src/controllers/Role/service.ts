@@ -1,5 +1,5 @@
-import Role, { RoleEntity, RoleInstance } from '@database/models/Role'
-import useValidation from '@expresso/hooks/useValidation'
+import Role, { RoleAttributes, RoleEntity } from '@database/entities/Role'
+import { optionsYup } from '@expresso/helpers/Validation'
 import { DtoFindAll } from '@expresso/interfaces/Dto'
 import {
   FilterQueryAttributes,
@@ -10,17 +10,13 @@ import { Request } from 'express'
 import _ from 'lodash'
 import roleSchema from './schema'
 
-interface DtoPaginate extends DtoFindAll {
-  data: RoleInstance[]
-}
-
 class RoleService {
   /**
    *
    * @param req
    * @returns
    */
-  public static async findAll(req: Request): Promise<DtoPaginate> {
+  public static async findAll(req: Request): Promise<DtoFindAll<RoleEntity>> {
     let { page, pageSize, filtered }: FilterQueryAttributes = req.getQuery()
 
     if (!page) page = 0
@@ -44,7 +40,7 @@ class RoleService {
    * @param id
    * @returns
    */
-  public static async findById(id: string): Promise<RoleInstance> {
+  public static async findById(id: string): Promise<RoleEntity> {
     const data = await Role.findById(id)
 
     if (!data) {
@@ -61,8 +57,8 @@ class RoleService {
    * @param formData
    * @returns
    */
-  public static async create(formData: RoleEntity): Promise<RoleInstance> {
-    const value = useValidation(roleSchema.create, formData)
+  public static async create(formData: RoleAttributes): Promise<RoleEntity> {
+    const value = roleSchema.create.validateSync(formData, optionsYup)
     const data = await Role.create(value)
 
     return data
@@ -76,14 +72,14 @@ class RoleService {
    */
   public static async update(
     id: string,
-    formData: RoleEntity
-  ): Promise<RoleInstance> {
+    formData: RoleAttributes
+  ): Promise<RoleEntity> {
     const data = await this.findById(id)
 
-    const value = useValidation(roleSchema.create, {
-      ...data.toJSON(),
-      ...formData,
-    })
+    const value = roleSchema.create.validateSync(
+      { ...data, ...formData },
+      optionsYup
+    )
 
     await data.updateOne(value ?? {})
 

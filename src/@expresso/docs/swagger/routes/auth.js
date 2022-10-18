@@ -10,10 +10,7 @@ module.exports = {
             schema: {
               type: 'object',
               properties: {
-                firstName: {
-                  type: 'string',
-                },
-                lastName: {
+                fullName: {
                   type: 'string',
                 },
                 email: {
@@ -30,8 +27,7 @@ module.exports = {
                 },
               },
               required: [
-                'firstName',
-                'lastName',
+                'fullName',
                 'email',
                 'newPassword',
                 'confirmNewPassword',
@@ -87,7 +83,6 @@ module.exports = {
     get: {
       tags: ['Auth'],
       summary: 'Verify Session',
-      produces: ['application/json'],
       security: [
         {
           auth_token: [],
@@ -104,7 +99,6 @@ module.exports = {
     post: {
       tags: ['Auth'],
       summary: 'Logout',
-      produces: ['application/json'],
       security: [
         {
           auth_token: [],

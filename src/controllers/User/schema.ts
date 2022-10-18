@@ -1,8 +1,7 @@
 import * as yup from 'yup'
 
 const createPassword = yup
-  .object()
-  .shape({
+  .object({
     newPassword: yup
       .string()
       .min(8, 'at least 8 characters')
@@ -14,31 +13,26 @@ const createPassword = yup
   })
   .required()
 
-const create = yup
-  .object()
-  .shape({
-    fullName: yup.string().required('full name is required'),
-    email: yup.string().email('invalid email').required('email is required'),
-    phone: yup.string().nullable(),
-    isActive: yup.boolean().nullable(),
-    isBlocked: yup.boolean().nullable(),
-    tokenVerify: yup.string().nullable(),
-    picturePath: yup.string().nullable(),
-    Role: yup.string().required('role is required'),
-  })
-  .required()
+const create = yup.object({
+  ...createPassword.fields,
+  fullName: yup.string().required('full name is required'),
+  email: yup.string().email('invalid email').required('email is required'),
+  phone: yup.string().nullable(),
+  tokenVerify: yup.string().nullable(),
+  UploadId: yup.string().nullable(),
+  isActive: yup.boolean().required('is active is required'),
+  RoleId: yup.string().required('role is required'),
+})
 
 const register = yup
-  .object()
-  .shape({
+  .object({
     ...createPassword.fields,
     ...create.fields,
   })
   .required()
 
 const login = yup
-  .object()
-  .shape({
+  .object({
     email: yup.string().email('invalid email').required('email is required'),
     password: yup.string().required('password is required'),
   })

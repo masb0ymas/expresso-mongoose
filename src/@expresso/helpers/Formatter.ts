@@ -1,6 +1,9 @@
 import { LOG_SERVER } from '@config/baseURL'
+import { i18nConfig } from '@config/i18nextConfig'
+import { ReqOptions } from '@expresso/interfaces/ReqOptions'
 import ResponseError from '@expresso/modules/Response/ResponseError'
 import chalk from 'chalk'
+import { TOptions } from 'i18next'
 import _ from 'lodash'
 import { validate as uuidValidate } from 'uuid'
 
@@ -67,30 +70,18 @@ function validateBoolean(value: string | boolean | number | any): boolean {
 /**
  *
  * @param value
+ * @param options
  * @returns
  */
-function validateUUID(value: string): string {
+function validateUUID(value: string, options?: ReqOptions): string {
+  const i18nOpt: string | TOptions = { lng: options?.lang }
+
   if (!uuidValidate(value)) {
-    throw new ResponseError.BadRequest('incorrect uuid format')
+    const message = i18nConfig.t('errors.incorrect_UUID_format', i18nOpt)
+    throw new ResponseError.BadRequest(message)
   }
 
   return value
-}
-
-/**
- *
- * @param length
- * @returns
- */
-function getUniqueCodev2(length = 32): string {
-  let result = ''
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const charactersLength = characters.length
-  for (let i = 0; i < length; i += 1) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-  }
-  return result
 }
 
 /**
@@ -120,7 +111,6 @@ export {
   validateEmpty,
   validateBoolean,
   validateUUID,
-  getUniqueCodev2,
   logServer,
   logErrServer,
 }

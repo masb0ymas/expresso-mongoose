@@ -1,4 +1,4 @@
-import User, { UserLoginAttributes } from '@database/models/User'
+import User, { UserLoginAttributes } from '@database/entities/User'
 import { logErrServer } from '@expresso/helpers/Formatter'
 import HttpResponse from '@expresso/modules/Response/HttpResponse'
 import { NextFunction, Request, Response } from 'express'

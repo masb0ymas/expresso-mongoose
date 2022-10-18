@@ -8,7 +8,7 @@ import RoleService from './service'
 
 route.get(
   '/role',
-  Authorization,
+  // Authorization,
   asyncHandler(async function findAll(req: Request, res: Response) {
     const data = await RoleService.findAll(req)
 
@@ -19,7 +19,7 @@ route.get(
 
 route.get(
   '/role/:id',
-  Authorization,
+  // Authorization,
   asyncHandler(async function findById(req: Request, res: Response) {
     const { id } = req.getParams()
 
@@ -32,7 +32,7 @@ route.get(
 
 route.post(
   '/role',
-  Authorization,
+  // Authorization,
   asyncHandler(async function createData(req: Request, res: Response) {
     const formData = req.getBody()
 

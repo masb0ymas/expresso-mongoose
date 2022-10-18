@@ -1,7 +1,5 @@
 /* eslint-disable prettier/prettier */
-import dotenv from 'dotenv'
-
-dotenv.config()
+import 'dotenv/config'
 
 // node env
 export const NODE_ENV = process.env.NODE_ENV ?? 'development'
@@ -9,10 +7,11 @@ export const NODE_ENV = process.env.NODE_ENV ?? 'development'
 // app
 export const APP_KEY = process.env.APP_KEY
 export const APP_NAME = process.env.APP_NAME ?? 'expresso'
+export const APP_LANG = process.env.APP_LANG ?? 'id'
 export const APP_PORT = Number(process.env.APP_PORT) ?? 8000
 
 // axios
-export const AXIOS_TIMEOUT = Number(process.env.AXIOS_TIMEOUT) ?? 5000
+export const AXIOS_TIMEOUT = process.env.AXIOS_TIMEOUT ?? '5m'
 
 // rate limit request
 export const RATE_LIMIT = Number(process.env.RATE_LIMIT) ?? 100
@@ -29,9 +28,9 @@ export const JWT_ACCESS_TOKEN_EXPIRED = process.env.JWT_ACCESS_TOKEN_EXPIRED ?? 
 export const JWT_SECRET_REFRESH_TOKEN: any = process.env.JWT_SECRET_REFRESH_TOKEN
 export const JWT_REFRESH_TOKEN_EXPIRED = process.env.JWT_REFRESH_TOKEN_EXPIRED ?? '7d'
 
-// url sandbox
-export const URL_CLIENT_SANDBOX = process.env.URL_CLIENT_SANDBOX ?? 'https://sandbox.example.com'
-export const URL_SERVER_SANDBOX = process.env.URL_SERVER_SANDBOX ?? 'https://api-sandbox.example.com'
+// url staging
+export const URL_CLIENT_STAGING = process.env.URL_CLIENT_STAGING ?? 'https://sandbox.example.com'
+export const URL_SERVER_STAGING = process.env.URL_SERVER_STAGING ?? 'https://api-sandbox.example.com'
 
 // url production
 export const URL_CLIENT_PRODUCTION = process.env.URL_CLIENT_PRODUCTION ?? 'https://example.com'

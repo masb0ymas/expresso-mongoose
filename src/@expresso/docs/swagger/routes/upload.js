@@ -1,8 +1,8 @@
 module.exports = {
-  '/role': {
+  '/upload': {
     get: {
-      tags: ['Role'],
-      summary: 'Get All Role',
+      tags: ['Upload'],
+      summary: 'Get All Upload',
       security: [
         {
           auth_token: [],
@@ -24,48 +24,96 @@ module.exports = {
       ],
       responses: {
         200: {
-          description: 'Get All Role',
+          description: 'Get All Upload',
         },
       },
     },
     post: {
-      tags: ['Role'],
-      summary: 'Create New Role',
+      tags: ['Upload'],
+      summary: 'Create New Upload',
       security: [
         {
           auth_token: [],
         },
       ],
+      parameters: [
+        {
+          $ref: '#/components/parameters/lang',
+        },
+      ],
       requestBody: {
         required: true,
         content: {
-          'application/x-www-form-urlencoded': {
+          'multipart/form-data': {
             schema: {
               type: 'object',
               properties: {
-                name: {
+                fileUpload: {
                   type: 'string',
+                  format: 'binary',
                 },
               },
-              required: ['name'],
+              required: ['fileUpload'],
             },
           },
         },
       },
       responses: {
         201: {
-          description: 'Create New Role',
+          description: 'Create New Upload',
         },
       },
     },
   },
-  '/role/multiple/restore': {
+  '/upload/presign-url': {
     post: {
-      tags: ['Role'],
-      summary: 'Multiple Restore Role',
+      tags: ['Upload'],
+      summary: 'Create New Upload',
       security: [
         {
           auth_token: [],
+        },
+      ],
+      parameters: [
+        {
+          $ref: '#/components/parameters/lang',
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/x-www-form-urlencoded': {
+            schema: {
+              type: 'object',
+              properties: {
+                keyFile: {
+                  type: 'string',
+                },
+              },
+              required: ['keyFile'],
+            },
+          },
+        },
+      },
+      responses: {
+        201: {
+          description: 'Create New Upload',
+        },
+      },
+    },
+  },
+  '/upload/multiple/restore': {
+    post: {
+      tags: ['Upload'],
+      summary: 'Multiple Restore Upload',
+      security: [
+        {
+          auth_token: [],
+        },
+      ],
+      parameters: [
+        {
+          $ref: '#/components/parameters/lang',
         },
       ],
       requestBody: {
@@ -87,18 +135,23 @@ module.exports = {
       },
       responses: {
         200: {
-          description: 'Multiple Restore Role',
+          description: 'Multiple Restore Upload',
         },
       },
     },
   },
-  '/role/multiple/soft-delete': {
+  '/upload/multiple/soft-delete': {
     post: {
-      tags: ['Role'],
-      summary: 'Multiple Soft Delete Role',
+      tags: ['Upload'],
+      summary: 'Multiple Soft Delete Upload',
       security: [
         {
           auth_token: [],
+        },
+      ],
+      parameters: [
+        {
+          $ref: '#/components/parameters/lang',
         },
       ],
       requestBody: {
@@ -120,18 +173,23 @@ module.exports = {
       },
       responses: {
         200: {
-          description: 'Multiple Soft Delete Role',
+          description: 'Multiple Soft Delete Upload',
         },
       },
     },
   },
-  '/role/multiple/force-delete': {
+  '/upload/multiple/force-delete': {
     post: {
-      tags: ['Role'],
-      summary: 'Multiple Force Delete Role ( Forever )',
+      tags: ['Upload'],
+      summary: 'Multiple Force Delete Upload ( Forever )',
       security: [
         {
           auth_token: [],
+        },
+      ],
+      parameters: [
+        {
+          $ref: '#/components/parameters/lang',
         },
       ],
       requestBody: {
@@ -153,15 +211,15 @@ module.exports = {
       },
       responses: {
         200: {
-          description: 'Multiple Force Delete Role ( Forever )',
+          description: 'Multiple Force Delete Upload ( Forever )',
         },
       },
     },
   },
-  '/role/{id}': {
+  '/upload/{id}': {
     get: {
-      tags: ['Role'],
-      summary: 'Get Role By Id',
+      tags: ['Upload'],
+      summary: 'Get Upload By Id',
       security: [
         {
           auth_token: [],
@@ -175,18 +233,21 @@ module.exports = {
           schema: {
             type: 'string',
           },
-          description: 'Role Id',
+          description: 'Upload Id',
+        },
+        {
+          $ref: '#/components/parameters/lang',
         },
       ],
       responses: {
         200: {
-          description: 'Get Role By Id',
+          description: 'Get Upload By Id',
         },
       },
     },
     put: {
-      tags: ['Role'],
-      summary: 'Update Data Role',
+      tags: ['Upload'],
+      summary: 'Update Data Upload',
       security: [
         {
           auth_token: [],
@@ -200,36 +261,40 @@ module.exports = {
           schema: {
             type: 'string',
           },
-          description: 'Role Id',
+          description: 'Upload Id',
+        },
+        {
+          $ref: '#/components/parameters/lang',
         },
       ],
       requestBody: {
         required: true,
         content: {
-          'application/x-www-form-urlencoded': {
+          'multipart/form-data': {
             schema: {
               type: 'object',
               properties: {
-                name: {
+                fileUpload: {
                   type: 'string',
+                  format: 'binary',
                 },
               },
-              required: ['name'],
+              required: ['fileUpload'],
             },
           },
         },
       },
       responses: {
         200: {
-          description: 'Update Data Role',
+          description: 'Update Data Upload',
         },
       },
     },
   },
-  '/role/restore/{id}': {
+  '/upload/restore/{id}': {
     put: {
-      tags: ['Role'],
-      summary: 'Restore Role By Id',
+      tags: ['Upload'],
+      summary: 'Restore Upload By Id',
       security: [
         {
           auth_token: [],
@@ -243,20 +308,23 @@ module.exports = {
           schema: {
             type: 'string',
           },
-          description: 'Role Id',
+          description: 'Upload Id',
+        },
+        {
+          $ref: '#/components/parameters/lang',
         },
       ],
       responses: {
         200: {
-          description: 'Restore Role By Id',
+          description: 'Restore Upload By Id',
         },
       },
     },
   },
-  '/role/soft-delete/{id}': {
+  '/upload/soft-delete/{id}': {
     delete: {
-      tags: ['Role'],
-      summary: 'Soft Delete Role By Id',
+      tags: ['Upload'],
+      summary: 'Soft Delete Upload By Id',
       security: [
         {
           auth_token: [],
@@ -270,20 +338,23 @@ module.exports = {
           schema: {
             type: 'string',
           },
-          description: 'Role Id',
+          description: 'Upload Id',
+        },
+        {
+          $ref: '#/components/parameters/lang',
         },
       ],
       responses: {
         200: {
-          description: 'Soft Delete Role By Id',
+          description: 'Soft Delete Upload By Id',
         },
       },
     },
   },
-  '/role/force-delete/{id}': {
+  '/upload/force-delete/{id}': {
     delete: {
-      tags: ['Role'],
-      summary: 'Force Delete Role By Id ( Forever )',
+      tags: ['Upload'],
+      summary: 'Force Delete Upload By Id ( Forever )',
       security: [
         {
           auth_token: [],
@@ -297,12 +368,15 @@ module.exports = {
           schema: {
             type: 'string',
           },
-          description: 'Role Id',
+          description: 'Upload Id',
+        },
+        {
+          $ref: '#/components/parameters/lang',
         },
       ],
       responses: {
         200: {
-          description: 'Force Delete Role By Id ( Forever )',
+          description: 'Force Delete Upload By Id ( Forever )',
         },
       },
     },

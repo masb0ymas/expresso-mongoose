@@ -15,9 +15,7 @@ const setOptions = {
   user: MONGODB_USERNAME,
   pass: MONGODB_PASSWORD,
   authSource: MONGODB_AUTH,
-  useCreateIndex: true,
   useNewUrlParser: true,
-  useFindAndModify: false,
   useUnifiedTopology: true,
 }
 

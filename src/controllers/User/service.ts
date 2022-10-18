@@ -1,5 +1,5 @@
-import User, { UserEntity, UserInstance } from '@database/models/User'
-import useValidation from '@expresso/hooks/useValidation'
+import User, { UserAttributes, UserEntity } from '@database/entities/User'
+import { optionsYup } from '@expresso/helpers/Validation'
 import { DtoFindAll } from '@expresso/interfaces/Dto'
 import {
   FilterQueryAttributes,
@@ -10,17 +10,13 @@ import { Request } from 'express'
 import _ from 'lodash'
 import userSchema from './schema'
 
-interface DtoPaginate extends DtoFindAll {
-  data: UserInstance[]
-}
-
 class UserService {
   /**
    *
    * @param req
    * @returns
    */
-  public static async findAll(req: Request): Promise<DtoPaginate> {
+  public static async findAll(req: Request): Promise<DtoFindAll<UserEntity>> {
     let { page, pageSize, filtered }: FilterQueryAttributes = req.getQuery()
 
     if (!page) page = 0
@@ -44,7 +40,7 @@ class UserService {
    * @param id
    * @returns
    */
-  public static async findById(id: string): Promise<UserInstance> {
+  public static async findById(id: string): Promise<UserEntity> {
     const data = await User.findById(id)
 
     if (!data) {
@@ -61,8 +57,8 @@ class UserService {
    * @param formData
    * @returns
    */
-  public static async create(formData: UserEntity): Promise<UserInstance> {
-    const value = useValidation(userSchema.create, formData)
+  public static async create(formData: UserAttributes): Promise<UserEntity> {
+    const value = userSchema.create.validateSync(formData, optionsYup)
     const data = await User.create(value)
 
     return data
@@ -76,14 +72,14 @@ class UserService {
    */
   public static async update(
     id: string,
-    formData: UserEntity
-  ): Promise<UserInstance> {
+    formData: UserAttributes
+  ): Promise<UserEntity> {
     const data = await this.findById(id)
 
-    const value = useValidation(userSchema.create, {
-      ...data.toJSON(),
-      ...formData,
-    })
+    const value = userSchema.create.validateSync(
+      { ...data, ...formData },
+      optionsYup
+    )
 
     await data.updateOne(value ?? {})
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-dynamic-delete */
 import { Request } from 'express'
 import _ from 'lodash'
 import getterObject from './getterObject'

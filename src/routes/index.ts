@@ -12,7 +12,7 @@ const route = Express.Router()
 // Index Route
 route.get('/', function (req: Request, res: Response) {
   let responseData: any = {
-    message: 'expresso',
+    message: 'expresso Mongoose',
     maintaner: 'masb0ymas, <n.fajri@outlook.com>',
     source: 'https://github.com/masb0ymas/expresso-mongoose',
   }

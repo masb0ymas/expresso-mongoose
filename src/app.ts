@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-throw-literal */
 import { APP_NAME, APP_PORT, NODE_ENV } from '@config/env'
-import i18next from '@config/i18nextConfig'
+import { i18nConfig } from '@config/i18nextConfig'
 import winstonLogger, { winstonStream } from '@config/Logger'
 import allowedOrigins from '@expresso/constants/ConstAllowedOrigins'
 import { logServer } from '@expresso/helpers/Formatter'
 import withState from '@expresso/helpers/withState'
 import ResponseError from '@expresso/modules/Response/ResponseError'
-import { optionsSwaggerUI, swaggerSpec } from '@expresso/utils/DocsSwagger'
-import ExpressErrorMongoose from '@middlewares/ExpressErrorMongoose'
+import { optionsSwaggerUI, swaggerSpec } from '@expresso/helpers/DocsSwagger'
 import ExpressErrorResponse from '@middlewares/ExpressErrorResponse'
 import ExpressErrorYup from '@middlewares/ExpressErrorYup'
 import ExpressRateLimit from '@middlewares/ExpressRateLimit'
@@ -26,6 +25,7 @@ import Logger from 'morgan'
 import path from 'path'
 import requestIp from 'request-ip'
 import swaggerUI from 'swagger-ui-express'
+import ExpressErrorMongoose from '@middlewares/ExpressErrorMongoose'
 
 const optCors: Cors.CorsOptions = {
   origin: allowedOrigins,
@@ -48,13 +48,17 @@ class App {
     this.routes()
   }
 
+  // Setup Plugin & Middleware
   private plugins(): void {
     this.application.use(Helmet())
     this.application.use(Cors(optCors))
     this.application.use(Logger('combined', { stream: winstonStream }))
     this.application.use(Express.urlencoded({ extended: true }))
     this.application.use(
-      Express.json({ limit: '200mb', type: 'application/json' })
+      Express.json({
+        limit: '200mb',
+        type: 'application/json',
+      })
     )
     this.application.use(cookieParser())
     this.application.use(compression())
@@ -62,7 +66,7 @@ class App {
     this.application.use(hpp())
     this.application.use(requestIp.mw())
     this.application.use(UserAgent.express())
-    this.application.use(i18nextMiddleware.handle(i18next))
+    this.application.use(i18nextMiddleware.handle(i18nConfig))
     this.application.use(ExpressRateLimit)
     this.application.use(function (
       req: Request,
@@ -74,6 +78,7 @@ class App {
     })
   }
 
+  // Setup Docs Swagger
   private docsSwagger(): void {
     this.application.get('/v1/api-docs.json', (req: Request, res: Response) => {
       res.setHeader('Content-Type', 'application/json')
@@ -87,6 +92,7 @@ class App {
     )
   }
 
+  // Setup Routes
   private routes(): void {
     this.application.use(indexRoutes)
 
@@ -98,6 +104,7 @@ class App {
     })
   }
 
+  // Run App
   public run(): void {
     this.application.use(ExpressErrorYup)
     this.application.use(ExpressErrorMongoose)

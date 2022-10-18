@@ -4,7 +4,7 @@ import { Schema, model, Document } from 'mongoose'
 
 const saltRounds = 10
 
-export interface UserEntity {
+interface UserInstance {
   fullName: string
   email: string
   password: string
@@ -18,10 +18,11 @@ export interface UserEntity {
   Role: string
   createdAt?: Date
   updatedAt?: Date
+  deletedAt?: Date | null
 }
 
 export interface TokenAttributes {
-  data: UserEntity
+  data: UserInstance
   message: string
 }
 
@@ -29,16 +30,21 @@ export interface UserLoginAttributes {
   uid: string
 }
 
-export type LoginAttributes = Pick<UserEntity, 'email' | 'password'>
+export type UserAttributes = Omit<
+  UserInstance,
+  '_id' | 'createdAt' | 'updatedAt' | 'deletedAt'
+>
 
-export type EmailAttributes = Pick<UserEntity, 'email' | 'fullName'>
+export type LoginAttributes = Pick<UserInstance, 'email' | 'password'>
+
+export type EmailAttributes = Pick<UserInstance, 'email' | 'fullName'>
 
 /**
  *
  * @param instance
  * @returns
  */
-export function setUserPassword(instance: UserEntity): string {
+export function setUserPassword(instance: UserInstance): string {
   const { newPassword, confirmNewPassword } = instance
   const fdPassword = { newPassword, confirmNewPassword }
   const validPassword = userSchema.createPassword.validateSyncAt(
@@ -51,7 +57,7 @@ export function setUserPassword(instance: UserEntity): string {
   return password
 }
 
-export interface UserInstance extends UserEntity, Document {}
+export interface UserEntity extends UserInstance, Document {}
 
 const UserSchema = new Schema(
   {
